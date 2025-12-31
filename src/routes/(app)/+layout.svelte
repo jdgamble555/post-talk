@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Layout from '$lib/features/app/layout.svelte';
+	import Layout from '$lib/features/app/layout.svelte';
 
-    const { children } = $props();
+	const { children } = $props();
 </script>
 
 <Layout>
-    {@render children()}
+	{@render children()}
 </Layout>

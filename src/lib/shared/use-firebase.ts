@@ -4,26 +4,20 @@ import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-
 const firebase_config = JSON.parse(PUBLIC_FIREBASE_CONFIG);
 
 // client setup
 export const setupFirebase = () => {
+	const app = getApps().length ? getApp() : initializeApp(firebase_config);
 
-    const app = getApps().length
-        ? getApp()
-        : initializeApp(firebase_config);
+	const auth = getAuth(app);
+	const db = getFirestore(app);
 
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    return {
-        auth,
-        db,
-        app
-    };
+	return {
+		auth,
+		db,
+		app
+	};
 };
 
 export const useFirebase = () => useSharedContext('firebase', setupFirebase);
-
-

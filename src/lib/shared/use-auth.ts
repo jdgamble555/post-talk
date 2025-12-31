@@ -1,23 +1,19 @@
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { useFirebase } from "./use-firebase";
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { useFirebase } from './use-firebase';
 
 export const useAuth = () => {
+	const { auth } = useFirebase();
 
-    const { auth } = useFirebase();
+	const loginWithGoogle = async () => {
+		return await signInWithPopup(auth, new GoogleAuthProvider());
+	};
 
-    const loginWithGoogle = async () => {
-        return await signInWithPopup(
-            auth,
-            new GoogleAuthProvider()
-        );
-    };
+	const logout = async () => {
+		return await signOut(auth);
+	};
 
-    const logout = async () => {
-        return await signOut(auth);
-    };
-
-    return {
-        loginWithGoogle,
-        logout
-    };
+	return {
+		loginWithGoogle,
+		logout
+	};
 };
