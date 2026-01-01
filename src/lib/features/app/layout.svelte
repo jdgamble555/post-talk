@@ -23,7 +23,7 @@
 			</main>
 			<div class="hidden w-72 flex-none lg:block">
 				<div
-					class="fixed top-14 h-full w-72 p-4 dark:border dark:border-t-0 dark:border-b-0 dark:border-[#372536] dark:bg-black dark:text-fuchsia-100"
+					class="fixed h-full w-72 p-4 dark:border dark:border-t-0 dark:border-b-0 dark:border-[#372536] dark:bg-black dark:text-fuchsia-100"
 				>
 					<RightSidebar />
 				</div>

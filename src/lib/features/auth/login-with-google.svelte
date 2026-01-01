@@ -6,7 +6,7 @@
 
 	const { loginWithGoogle } = useAuth();
 
-	const login = async () => {
+	const onclick = async () => {
 		try {
 			await loginWithGoogle();
 			await goto(resolve('/home'));
@@ -16,6 +16,4 @@
 	};
 </script>
 
-<button class="bg-red-600 p-2 font-semibold text-white" onclick={login}>
-	Signin with Google
-</button>
+<button class="bg-red-600 p-2 font-semibold text-white" {onclick}> Signin with Google </button>
