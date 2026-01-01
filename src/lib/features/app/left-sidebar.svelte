@@ -7,27 +7,27 @@
 	import { Button } from '$lib/components/ui/button';
 </script>
 
-<div class="flex flex-col items-start gap-4 p-4">
-	<h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+<div class="flex flex-col items-start gap-5 p-4">
+	<h1 class="ml-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
 		Post.<span class="text-gray-500">Talk</span>
 	</h1>
-	<Button variant="ghost" href="/home">
+	<Button class="gap-5 w-full justify-start p-5" variant="ghost" href="/home">
 		<House class="size-8" />
 		Home
 	</Button>
-	<Button variant="ghost">
+	<Button class="gap-5 w-full justify-start p-5" variant="ghost" href="/bookmarks">
 		<Bookmark class="size-8" />
 		Bookmarks
 	</Button>
-	<Button variant="ghost">
+	<Button class="gap-5 w-full justify-start p-5" variant="ghost">
 		<Bell class="size-8" />
 		Notifications
 	</Button>
-	<Button variant="ghost">
+	<Button class="gap-5 w-full justify-start p-5" variant="ghost">
 		<User class="size-8" />
 		Profile
 	</Button>
-	<Button variant="ghost" href="/settings">
+	<Button class="gap-5 w-full justify-start p-5" variant="ghost" href="/settings">
 		<Settings class="size-8" />
 		Settings
 	</Button>

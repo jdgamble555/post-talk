@@ -2,7 +2,7 @@
 // for information about these interfaces
 declare global {
 	type PostType = {
-		uid: string;
+		createdBy: string;
 		createdAt: Date;
 		id: string;
 		content: string;

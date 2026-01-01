@@ -12,9 +12,7 @@
 	<div class="flex grow justify-center">
 		<div class="flex w-full max-w-7xl justify-center">
 			<aside class="z-40 hidden w-72 flex-none md:flex">
-				<div
-					class="fixed flex h-full w-72 flex-col p-4 dark:border dark:border-t-0 dark:border-b-0 dark:border-[#372536] dark:bg-black dark:text-white"
-				>
+				<div class="fixed flex h-full w-72 flex-col border-r p-4 dark:text-white">
 					<LeftSidebar />
 				</div>
 			</aside>
@@ -22,9 +20,7 @@
 				{@render children()}
 			</main>
 			<div class="hidden w-72 flex-none lg:block">
-				<div
-					class="fixed h-full w-72 p-4 dark:border dark:border-t-0 dark:border-b-0 dark:border-[#372536] dark:bg-black dark:text-fuchsia-100"
-				>
+				<div class="fixed h-full w-72 border-l p-4">
 					<RightSidebar />
 				</div>
 			</div>
