@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { useAddPost } from '$lib/shared/use-posts';
+	import { useAddPost } from '$lib/shared/use-posts.svelte';
 	import { toast } from 'svelte-sonner';
 
 	const { addPost } = useAddPost();

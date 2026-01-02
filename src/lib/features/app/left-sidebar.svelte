@@ -7,7 +7,7 @@
 	import { Button } from '$lib/components/ui/button';
 </script>
 
-<div class="flex flex-col items-start gap-5 p-4">
+<div class="flex flex-col items-start gap-8 p-4">
 	<h1 class="ml-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
 		Post.<span class="text-gray-500">Talk</span>
 	</h1>
