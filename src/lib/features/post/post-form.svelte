@@ -2,10 +2,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { useAddPost } from '$lib/shared/use-posts.svelte';
 	import { toast } from 'svelte-sonner';
+	import WordCounter from './word-counter.svelte';
 
 	const { addPost } = useAddPost();
 
-	let content = $state<string | null>(null);
+	let content = $state<string>('');
 
 	const onclick = async () => {
 		if (!content) return;
@@ -17,7 +18,7 @@
 			return;
 		}
 
-		content = null;
+		content = '';
 	};
 </script>
 
@@ -32,5 +33,6 @@
 	<hr class="m-3" />
 	<div class="flex items-center justify-between px-5">
 		<Button type="button" disabled={!content} {onclick}>Post</Button>
+		<WordCounter {content} />
 	</div>
 </div>
