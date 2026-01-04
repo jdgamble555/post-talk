@@ -3,7 +3,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { Ellipsis, Pencil, Trash } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-	import { useUser } from '$lib/shared/use-user.svelte';
+	import { useUser } from '$lib/shared/firebase/use-user.svelte';
 	import PostDeleteDialog from './post-delete-dialog.svelte';
 
 	const { id, createdBy }: { id: string; createdBy: string } = $props();

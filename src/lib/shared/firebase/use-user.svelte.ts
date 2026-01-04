@@ -1,8 +1,15 @@
 import { onIdTokenChanged, type User } from 'firebase/auth';
 import { onDestroy } from 'svelte';
-import { rune } from './rune.svelte';
-import { useSharedContext } from './use-shared-context';
+import { rune } from '../rune.svelte';
+import { useSharedContext } from '../use-shared-context';
 import { useFirebase } from './use-firebase';
+
+export const convertUser = async (user: User) => {
+	const { displayName, photoURL, uid, email } = user;
+	const tokenResult = await user.getIdTokenResult();
+	const username = tokenResult.claims?.username as string | undefined;
+	return { displayName, photoURL, uid, email, username };
+};
 
 const _useUser = () => {
 	const { auth } = useFirebase();
@@ -31,12 +38,15 @@ const _useUser = () => {
 			}
 
 			// logged in
-			const { displayName, photoURL, uid, email } = _user;
-			user.current = {
-				loading: false,
-				data: { displayName, photoURL, uid, email },
-				error: null
-			};
+			convertUser(_user).then(
+				({ displayName, photoURL, uid, email, username }) => {
+					user.current = {
+						loading: false,
+						data: { displayName, photoURL, uid, email, username },
+						error: null
+					};
+				}
+			);
 		},
 		(error) => {
 			// error

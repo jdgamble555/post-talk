@@ -4,16 +4,16 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async () => {
-	if (!browser) {
-		return;
-	}
+    if (!browser) {
+        return;
+    }
 
-	// Login guard can be slow
-	const user = await getUser();
+    // Login guard can be slow
+    const user = await getUser();
 
-	if (user) {
-		redirect(302, '/home');
-	}
+    if (!user) {
+        redirect(302, '/login');
+    }
 
-	return;
+    return;
 };

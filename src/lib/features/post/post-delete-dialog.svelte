@@ -11,7 +11,7 @@
 		const { error: postError } = await deletePost(id);
 
 		if (postError) {
-			toast.error(postError);
+			toast.error(postError.message);
 			return;
 		}
 

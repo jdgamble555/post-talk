@@ -14,7 +14,7 @@
 		const { error: postError } = await addPost(content);
 
 		if (postError) {
-			toast.error(postError);
+			toast.error(postError.message);
 			return;
 		}
 

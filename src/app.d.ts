@@ -13,6 +13,7 @@ declare global {
 		photoURL: string | null;
 		uid: string;
 		email: string | null;
+		username?: string;
 	};
 
 	namespace App {

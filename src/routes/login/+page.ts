@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { getUser } from '$lib/shared/get-user';
+import { getUser } from '$lib/shared/firebase/get-user';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 

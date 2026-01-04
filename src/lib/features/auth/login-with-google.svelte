@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { useAuth } from '$lib/shared/use-auth';
+	import { useAuth } from '$lib/shared/firebase/use-auth';
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
 
