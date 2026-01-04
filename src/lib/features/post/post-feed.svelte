@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { usePosts } from '$lib/shared/use-posts.svelte';
+	import { usePosts } from '$lib/shared/firebase/use-posts.svelte';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import PostActionMenu from './post-action-menu.svelte';
 

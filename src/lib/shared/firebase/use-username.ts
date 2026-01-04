@@ -1,6 +1,6 @@
-import { useFirebase } from './firebase/use-firebase';
-import { useFunctions } from './firebase/use-functions';
-import { useDoc } from './firebase/use-doc.svelte';
+import { useFirebase } from './use-firebase';
+import { useFunctions } from './use-functions';
+import { useDoc } from './use-doc.svelte';
 
 export const useUsername = () => {
 	const { auth } = useFirebase();

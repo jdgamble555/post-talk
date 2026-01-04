@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useDeletePost } from '$lib/shared/use-posts.svelte';
+	import { useDeletePost } from '$lib/shared/firebase/use-posts.svelte';
 	import { toast } from 'svelte-sonner';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 

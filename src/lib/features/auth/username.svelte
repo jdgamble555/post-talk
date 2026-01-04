@@ -8,7 +8,7 @@
 		FieldError
 	} from '$lib/components/ui/field/index.js';
 	import { useDebounce } from '$lib/shared/use-debounce';
-	import { useUsername } from '$lib/shared/use-username';
+	import { useUsername } from '$lib/shared/firebase/use-username';
 	import * as v from 'valibot';
 	import { UsernameSchema } from '$lib/features/auth/username-schema';
 	import { LoaderCircle } from '@lucide/svelte';

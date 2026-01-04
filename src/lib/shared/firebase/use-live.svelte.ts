@@ -1,7 +1,7 @@
 import { onSnapshot } from 'firebase/firestore';
 import type { FirebaseError } from 'firebase/app';
-import { dataConverter } from './use-doc.svelte';
 import { dev } from '$app/environment';
+import { dataConverter } from './converter';
 
 export const useLive = <T>(type: Parameters<typeof onSnapshot>[0]) => {
 	const live = $state<{

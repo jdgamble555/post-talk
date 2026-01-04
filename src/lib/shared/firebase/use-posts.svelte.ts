@@ -1,7 +1,7 @@
 import { collection, orderBy, query } from 'firebase/firestore';
-import { useFirebase } from './firebase/use-firebase';
-import { useDoc } from './firebase/use-doc.svelte';
-import { useLive } from './firebase/use-live.svelte';
+import { useFirebase } from './use-firebase';
+import { useDoc } from './use-doc.svelte';
+import { useLive } from './use-live.svelte';
 
 export const useAddPost = () => {
 	const { auth } = useFirebase();
