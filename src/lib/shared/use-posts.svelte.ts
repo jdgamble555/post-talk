@@ -47,7 +47,7 @@ export const usePosts = () => {
 
 	const { db } = useFirebase();
 
-	const posts = useLive<PostType>(
+	const posts = useLive<PostDoc>(
 		query(collection(db, 'posts'), orderBy('createdAt'))
 	);
 

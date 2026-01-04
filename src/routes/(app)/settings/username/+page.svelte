@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Username from '$lib/features/auth/username.svelte';
+	import ChangeUsername from '$lib/features/settings/change-username.svelte';
 </script>
 
-<Username isChangeUserName />
+<ChangeUsername />

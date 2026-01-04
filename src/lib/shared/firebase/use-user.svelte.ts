@@ -39,10 +39,10 @@ const _useUser = () => {
 
 			// logged in
 			convertUser(_user).then(
-				({ displayName, photoURL, uid, email, username }) => {
+				(data) => {
 					user.current = {
 						loading: false,
-						data: { displayName, photoURL, uid, email, username },
+						data,
 						error: null
 					};
 				}

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Card from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import {
@@ -13,18 +12,9 @@
 	import * as v from 'valibot';
 	import { UsernameSchema } from '$lib/features/auth/username-schema';
 	import { LoaderCircle } from '@lucide/svelte';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import { toast } from 'svelte-sonner';
-	import { cn } from '$lib/utils';
-	import BackBar from '$lib/shared/back-bar.svelte';
-	import { useUser } from '$lib/shared/firebase/use-user.svelte';
 
-	const { isChangeUserName = false }: { isChangeUserName?: boolean } = $props();
-
-	const user = useUser();
-
-	const currentUsername = $derived(user.current.data?.username ?? '');
+	const { afterContinue = () => {} }: { afterContinue?: () => void } = $props();
 
 	const id = $props.id();
 
@@ -81,73 +71,45 @@
 
 		toast.success('Username set successfully!');
 
-		if (isChangeUserName) {
-			return;
-		}
-		await goto(resolve('/home'));
+		afterContinue();
 	};
 </script>
 
-<div class="flex flex-col gap-5">
-	{#if isChangeUserName}
-		<BackBar title="Change Username" href="/settings" />
+<Field>
+	<FieldLabel for="username-{id}">Username</FieldLabel>
+	<Input
+		oninput={() => {
+			validate();
+			debounceUsername();
+		}}
+		bind:value={username}
+		id="username-{id}"
+		type="text"
+		required
+		aria-invalid={!!isError}
+	/>
+	{#if isError}
+		<FieldError>{isError}</FieldError>
+	{:else if isAvailable}
+		<FieldDescription class="text-green-600">
+			Username is available!
+		</FieldDescription>
+	{:else if isLoading}
+		<FieldDescription>Checking username availability...</FieldDescription>
+	{:else if !username}
+		<FieldDescription>
+			Enter a unique username between 3 and 20 characters.
+		</FieldDescription>
 	{/if}
-	<div class={cn('px-5', !isChangeUserName ? 'mt-8 sm:mt-16' : '')}>
-		<Card.Root class={cn('mx-auto', isChangeUserName ? '' : 'max-w-sm')}>
-			<Card.Header>
-				<Card.Title class="text-2xl">Username</Card.Title>
-				<Card.Description>
-					{#if isChangeUserName}
-						Change your username. Your current username is
-						<span class="font-bold">{currentUsername}</span>.
-					{:else}
-						Create your username.
-					{/if}
-				</Card.Description>
-			</Card.Header>
-			<Card.Content class="flex flex-col gap-5">
-				<Field>
-					<FieldLabel for="username-{id}">Username</FieldLabel>
-					<Input
-						oninput={() => {
-							validate();
-							debounceUsername();
-						}}
-						bind:value={username}
-						id="username-{id}"
-						type="text"
-						required
-					/>
-					{#if isError}
-						<FieldError>{isError}</FieldError>
-					{:else if isAvailable}
-						<FieldDescription class="text-green-600">
-							Username is available!
-						</FieldDescription>
-					{:else if isLoading}
-						<FieldDescription
-							>Checking username availability...</FieldDescription
-						>
-					{:else if !username}
-						<FieldDescription>
-							Enter a unique username between 3 and 20 characters.
-						</FieldDescription>
-					{/if}
-				</Field>
-			</Card.Content>
-			<Card.Footer>
-				<Button
-					class="w-full cursor-pointer"
-					{onclick}
-					disabled={!!isError || !username || isLoading}
-				>
-					{#if isLoading}
-						<LoaderCircle class="size-4 animate-spin" />
-					{:else}
-						Continue
-					{/if}
-				</Button>
-			</Card.Footer>
-		</Card.Root>
-	</div>
-</div>
+</Field>
+<Button
+	class="w-full cursor-pointer"
+	{onclick}
+	disabled={!!isError || !username || isLoading}
+>
+	{#if isLoading}
+		<LoaderCircle class="size-4 animate-spin" />
+	{:else}
+		Save
+	{/if}
+</Button>
