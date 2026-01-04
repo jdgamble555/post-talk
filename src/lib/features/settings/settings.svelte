@@ -4,10 +4,8 @@
 	import { ChevronRight } from '@lucide/svelte';
 
 	// TODO
-	// spinner on profile settings (maybe after page.ts)
 	// update create user trigger
 	// add profile main category setting
-	// add icons next to setting (maybe?)
 </script>
 
 <div class="flex flex-col gap-5">

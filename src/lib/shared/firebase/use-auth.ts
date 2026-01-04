@@ -11,7 +11,28 @@ export const useAuth = () => {
 	const { auth } = useFirebase();
 
 	const loginWithGoogle = async () => {
-		return await signInWithPopup(auth, new GoogleAuthProvider());
+
+		try {
+			const user = await signInWithPopup(auth, new GoogleAuthProvider());
+			return {
+				error: null,
+				data: user
+			};
+		} catch (e) {
+			if (e instanceof FirebaseError) {
+				return {
+					data: null,
+					error: e
+				};
+			}
+			if (e instanceof Error) {
+				return {
+					data: null,
+					error: e
+				};
+			}
+			throw e;
+		}
 	};
 
 	const logout = async () => {

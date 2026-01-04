@@ -4,6 +4,8 @@
 	import Loading from '$lib/shared/loading.svelte';
 	import { page } from '$app/state';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 
 	const { children } = $props();
 
@@ -11,32 +13,31 @@
 
 	const currentUser = $derived(user.current);
 
-	const next = new SvelteURLSearchParams({
-		next: page.url.pathname || '/home'
+	const next = $derived.by(() => {
+		const _next = page.url.searchParams.get('next') || '/home';
+		const params = new SvelteURLSearchParams();
+		params.set('next', _next);
+		return params.toString();
 	});
 
-	const loginURL = $derived('/login?' + next.toString());
-	const usernameURL = $derived('/username?' + next.toString());
+	const loginURL = $derived(`/login?${next}` as Pathname);
+	const usernameURL = $derived(`/username?${next}` as Pathname);
 
 	$effect(() => {
 		if (currentUser.loading) return;
 
 		if (!currentUser.data || currentUser.error) {
-			// eslint-disable-next-line svelte/no-navigation-without-resolve
-			goto(loginURL);
+			goto(resolve(loginURL));
 		}
 
 		if (!currentUser.data?.username) {
-			// eslint-disable-next-line svelte/no-navigation-without-resolve
-			goto(usernameURL);
+			goto(resolve(usernameURL));
 		}
 	});
 </script>
 
-{#if currentUser.loading}
-	<Loading />
-{:else if currentUser.data}
+{#if currentUser.data}
 	{@render children()}
 {:else}
-	<!-- nothing / redirecting... -->
+	<Loading />
 {/if}

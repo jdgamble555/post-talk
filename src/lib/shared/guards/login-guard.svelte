@@ -1,34 +1,39 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
 	import { useUser } from '$lib/shared/firebase/use-user.svelte';
 	import Loading from '$lib/shared/loading.svelte';
 	import { page } from '$app/state';
 	import { useAuth } from '$lib/shared/firebase/use-auth';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import type { Pathname } from '$app/types';
 
 	const { children } = $props();
 
 	const user = useUser();
+	const { logout } = useAuth();
 
 	const currentUser = $derived(user.current);
 
 	const next = $derived.by(() => {
-		const _next = page.url.searchParams.get('next') || '/home';
+		let _next = page.url.searchParams.get('next') || '/home';
 
 		// Prevent redirect loop
 		if (_next.startsWith('/login')) {
-			return '/home';
+			_next = '/home';
 		}
-		return _next;
+		return _next as Pathname;
 	});
 
-	const loginURL = $derived('/login?' + next.toString());
-
-	const { logout } = useAuth();
+	const loginURL = $derived.by(() => {
+		const params = new SvelteURLSearchParams();
+		params.set('next', next);
+		return `/login?${params.toString()}` as Pathname;
+	});
 
 	const runLogout = async () => {
 		await logout();
-		// eslint-disable-next-line svelte/no-navigation-without-resolve
-		await goto(loginURL);
+		await goto(resolve(loginURL));
 	};
 
 	$effect(() => {
@@ -37,8 +42,7 @@
 		}
 
 		if (currentUser.data) {
-			// eslint-disable-next-line svelte/no-navigation-without-resolve
-			goto(next);
+			goto(resolve(next));
 			return;
 		}
 
@@ -48,10 +52,8 @@
 	});
 </script>
 
-{#if currentUser.loading}
-	<Loading />
-{:else if !currentUser.data}
+{#if !currentUser.data}
 	{@render children()}
 {:else}
-	<!-- nothing / redirecting... -->
+	<Loading />
 {/if}
