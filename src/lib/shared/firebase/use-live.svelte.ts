@@ -3,7 +3,7 @@ import type { FirebaseError } from 'firebase/app';
 import { dev } from '$app/environment';
 import { dataConverter } from './converter';
 
-export const useLive = <T>(type: Parameters<typeof onSnapshot>[0]) => {
+export const useLive = <T>(query: Parameters<typeof onSnapshot>[0]) => {
 	const live = $state<{
 		current: {
 			data: T[];
@@ -16,7 +16,7 @@ export const useLive = <T>(type: Parameters<typeof onSnapshot>[0]) => {
 
 	$effect(() => {
 		return onSnapshot(
-			type.withConverter<T>(dataConverter),
+			query.withConverter<T>(dataConverter),
 			(q) => {
 				if (q.empty) {
 					live.current = {

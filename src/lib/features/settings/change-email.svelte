@@ -76,7 +76,7 @@
 						</Field.Description>
 					{/if}
 				</Field.Field>
-				<Button {onclick} disabled={!valid}>
+				<Button {onclick} disabled={!valid || isSaving}>
 					{#if isSaving}
 						<LoaderCircle class="size-4 animate-spin" />
 					{:else}
