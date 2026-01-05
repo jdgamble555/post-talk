@@ -14,6 +14,14 @@
 
 	const user = useUser();
 
+	// TODO
+	// remove email from users doc
+	// handle login with magic link
+	// handle relogin for change email
+	// update photo, drag and drop and click
+	// update connections
+	// look into linking accounts with different emails
+
 	let email = $derived(user.current.data?.email || '');
 	let isSaving = $state<boolean>(false);
 	let issues = $state<v.FlatErrors<typeof emailSchema>['nested'] | null>(null);
