@@ -23,8 +23,8 @@
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger>
 		{#snippet child({ props })}
-			<Button {...props} variant="ghost" class="cursor-pointer p-8">
-				<div class="flex items-center justify-between gap-3">
+			<Button {...props} variant="ghost" class="cursor-pointer py-8 min-w-0 max-w-full">
+				<div class="flex items-center justify-between gap-3 min-w-0 w-full">
 					<Avatar.Root class="size-12">
 						<Avatar.Image
 							src={currentUser?.photoURL}
@@ -36,11 +36,11 @@
 							>{fallback}</Avatar.Fallback
 						>
 					</Avatar.Root>
-					<div class="flex flex-col items-start">
-						<div class="font-bold text-ellipsis">
+					<div class="flex min-w-0 flex-col items-start flex-1 max-w-full overflow-hidden text-ellipsis">
+						<div class="font-bold">
 							{currentUser?.displayName}
 						</div>
-						<div class="text-ellipsis text-muted-foreground">
+						<div class="text-muted-foreground">
 							@{currentUser?.username}
 						</div>
 					</div>

@@ -61,7 +61,9 @@
 	}, 500);
 
 	const onclick = async () => {
+		isLoading = true;
 		const { error } = await setUsername(username);
+		isLoading = false;
 
 		if (error) {
 			isError = error.message;

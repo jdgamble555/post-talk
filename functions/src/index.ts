@@ -9,6 +9,7 @@
 
 import { setGlobalOptions } from 'firebase-functions';
 export * from './username';
+export * from './users';
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
