@@ -4,7 +4,6 @@
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { useIsMac } from '$lib/shared/use-is-mac.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import ModeSwitcher from './mode-switcher.svelte';
 
 	const isMac = useIsMac();
 
@@ -20,11 +19,12 @@
 
 <svelte:document onkeydown={handleKeydown} />
 
-<div class="flex flex-col gap-4">
-	<div class="flex items-center justify-end">
-		<ModeSwitcher />
-	</div>
-	<Button variant="ghost" class=" flex w-full justify-between border" onclick={() => (open = true)}>
+<div class="flex flex-col justify-center items-center gap-4">
+	<Button
+		variant="ghost"
+		class="flex w-full justify-between border"
+		onclick={() => (open = true)}
+	>
 		<div class="flex items-center gap-3 text-accent-foreground/50">
 			<SearchIcon />
 			<span class="w-full text-accent-foreground/50">Search...</span>

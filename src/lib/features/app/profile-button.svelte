@@ -7,6 +7,8 @@
 	import { Ellipsis, LogOut, User } from '@lucide/svelte';
 	import Logout from '../auth/logout.svelte';
 	import type { Pathname } from '$app/types';
+	import ModeSwitcher from './mode-switcher.svelte';
+
 
 	const user = useUser();
 	const currentUser = $derived(user.current.data);
@@ -23,8 +25,12 @@
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger>
 		{#snippet child({ props })}
-			<Button {...props} variant="ghost" class="cursor-pointer py-8 min-w-0 max-w-full">
-				<div class="flex items-center justify-between gap-3 min-w-0 w-full">
+			<Button
+				{...props}
+				variant="ghost"
+				class="max-w-full min-w-0 cursor-pointer py-8"
+			>
+				<div class="flex w-full min-w-0 items-center justify-between gap-3">
 					<Avatar.Root class="size-12">
 						<Avatar.Image
 							src={currentUser?.photoURL}
@@ -32,11 +38,13 @@
 								? `${currentUser.username} profile`
 								: 'Profile'}
 						/>
-						<Avatar.Fallback class="[html:not(.dark)_&]:bg-gray-200"
-							>{fallback}</Avatar.Fallback
-						>
+						<Avatar.Fallback class="[html:not(.dark)_&]:bg-gray-200">
+							{fallback}
+						</Avatar.Fallback>
 					</Avatar.Root>
-					<div class="flex min-w-0 flex-col items-start flex-1 max-w-full overflow-hidden text-ellipsis">
+					<div
+						class="flex max-w-full min-w-0 flex-1 flex-col items-start overflow-hidden text-ellipsis"
+					>
 						<div class="font-bold">
 							{currentUser?.displayName}
 						</div>
@@ -51,7 +59,9 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content align="end">
 		<DropdownMenu.Group>
-			<DropdownMenu.Label>My Account</DropdownMenu.Label>
+			<DropdownMenu.Label class="flex items-center gap-2">
+				Appearance <ModeSwitcher />
+			</DropdownMenu.Label>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item>
 				<a href={resolve(profileURL as Pathname)} class="flex gap-4">

@@ -8,20 +8,7 @@
 	import { LoaderCircle } from '@lucide/svelte';
 	import { toast } from 'svelte-sonner';
 	import * as v from 'valibot';
-
-	const profileShema = v.object({
-		bio: v.nullable(
-			v.pipe(
-				v.string(),
-				v.maxLength(160, 'Bio must be at most 160 characters long.')
-			)
-		),
-		displayName: v.pipe(
-			v.string(),
-			v.minLength(2, 'Display name must be at least 2 characters long.'),
-			v.maxLength(50, 'Display name must be at most 50 characters long.')
-		)
-	});
+	import { profileShema } from './profile-schema';
 
 	let userDoc = $state<{
 		data: UserDoc | null;
@@ -36,7 +23,7 @@
 	let displayName = $derived(userDoc.data?.displayName || '');
 	let bio = $derived(userDoc.data?.bio || '');
 	let isSaving = $state<boolean>(false);
-	let issues = $state<v.FlatErrors<typeof profileShema> | null>(null);
+	let issues = $state<v.FlatErrors<typeof profileShema>['nested'] | null>(null);
 	let valid = $state<boolean>(false);
 
 	const { updateProfile, getProfile } = useProfile();
@@ -60,7 +47,7 @@
 	const oninput = () => {
 		const result = v.safeParse(profileShema, { displayName, bio });
 		if (!result.success) {
-			issues = v.flatten<typeof profileShema>(result.issues);
+			issues = v.flatten<typeof profileShema>(result.issues).nested;
 			valid = false;
 			return;
 		}
@@ -78,7 +65,6 @@
 			toast.error('Failed to update profile.');
 			return;
 		}
-
 		toast.success('Profile updated successfully!');
 	};
 </script>
@@ -105,11 +91,11 @@
 								autocomplete="off"
 								placeholder="Evil Rabbit"
 								bind:value={displayName}
-								aria-invalid={!!issues?.nested?.displayName?.[0]}
+								aria-invalid={!!issues?.displayName?.[0]}
 							/>
 
-							{#if issues?.nested?.displayName}
-								<Field.Error>{issues.nested.displayName[0]}</Field.Error>
+							{#if issues?.displayName}
+								<Field.Error>{issues.displayName[0]}</Field.Error>
 							{:else}
 								<Field.Description>
 									This will appear on your profile.
@@ -123,10 +109,10 @@
 								autocomplete="off"
 								placeholder="Tell us about yourself"
 								bind:value={bio}
-								aria-invalid={!!issues?.nested?.bio?.[0]}
+								aria-invalid={!!issues?.bio?.[0]}
 							/>
-							{#if issues?.nested?.bio}
-								<Field.Error>{issues.nested.bio[0]}</Field.Error>
+							{#if issues?.bio}
+								<Field.Error>{issues.bio[0]}</Field.Error>
 							{:else}
 								<Field.Description>
 									This will appear on your profile.

@@ -5,7 +5,10 @@ import { useFirebase } from './use-firebase';
 export const useProfile = () => {
 	const { auth } = useFirebase();
 
-	const { updateProfile: updateUserProfile } = useAuth();
+	const { 
+		updateProfile: updateUserProfile,
+		updateEmail: updateUserEmail
+	} = useAuth();
 
 	const { setDocument, getDocument } = useDoc();
 
@@ -37,6 +40,16 @@ export const useProfile = () => {
         };
 	};
 
+	const updateEmail = async (newEmail: string) => {
+		if (!auth.currentUser) {
+			throw 'No User';
+		}
+
+		const { error: updateError } = await updateUserEmail(newEmail);
+
+		return { error: updateError };
+	};
+
 	const getProfile = async () => {
 		if (!auth.currentUser) {
 			throw 'No User';
@@ -44,5 +57,5 @@ export const useProfile = () => {
 		return await getDocument<UserDoc>(`users/${auth.currentUser.uid}`);
 	};
 
-	return { updateProfile, getProfile };
+	return { updateProfile, updateEmail, getProfile };
 };

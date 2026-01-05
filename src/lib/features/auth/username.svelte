@@ -13,6 +13,9 @@
 	import { UsernameSchema } from '$lib/features/auth/username-schema';
 	import { LoaderCircle } from '@lucide/svelte';
 	import { toast } from 'svelte-sonner';
+	import { useUser } from '$lib/shared/firebase/use-user.svelte';
+
+	const user = useUser();
 
 	const { afterContinue = () => {} }: { afterContinue?: () => void } = $props();
 
@@ -22,7 +25,7 @@
 	let isLoading = $state<boolean>(false);
 	let isAvailable = $state<boolean>(false);
 
-	let username = $state<string>('');
+	let username = $derived(user.current.data?.username || '');
 
 	const { usernameAvailable, setUsername } = useUsername();
 

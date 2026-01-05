@@ -2,7 +2,8 @@ import {
 	GoogleAuthProvider,
 	signInWithPopup,
 	signOut,
-	updateProfile as updateAuthProfile
+	updateProfile as updateAuthProfile,
+	updateEmail as updateAuthEmail
 } from 'firebase/auth';
 import { useFirebase } from './use-firebase';
 import { FirebaseError } from 'firebase/app';
@@ -39,6 +40,31 @@ export const useAuth = () => {
 		return await signOut(auth);
 	};
 
+	const updateEmail = async (newEmail: string) => {
+		const user = auth.currentUser;
+		if (!user) {
+			throw 'No user!';
+		}
+		try {
+			await updateAuthEmail(auth.currentUser, newEmail);
+			return {
+				error: null
+			};
+		} catch (e) {
+			if (e instanceof FirebaseError) {
+				return {
+					error: e
+				};
+			}
+			if (e instanceof Error) {
+				return {
+					error: e
+				};
+			}
+			throw e;
+		}
+	};
+
 	const updateProfile = async ({
 		displayName,
 		photoURL
@@ -73,6 +99,7 @@ export const useAuth = () => {
 	return {
 		loginWithGoogle,
 		logout,
-		updateProfile
+		updateProfile,
+		updateEmail
 	};
 };

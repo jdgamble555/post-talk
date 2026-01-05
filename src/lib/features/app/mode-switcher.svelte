@@ -1,13 +1,17 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toggleMode } from 'mode-watcher';
+
+	const onclick = () => {
+		toggleMode();
+	};
 </script>
 
 <Button
 	variant="ghost"
 	size="icon"
 	class="group/toggle extend-touch-target size-8 cursor-pointer"
-	onclick={toggleMode}
+	{onclick}
 	title="Toggle theme"
 >
 	<svg
