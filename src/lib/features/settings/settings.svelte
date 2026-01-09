@@ -2,10 +2,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import BackBar from '$lib/shared/back-bar.svelte';
 	import { ChevronRight } from '@lucide/svelte';
-
-	// TODO
-	// update create user trigger
-	// add profile main category setting
 </script>
 
 <div class="flex flex-col gap-5">
@@ -29,15 +25,15 @@
 				<ChevronRight class="size-5" />
 			</div>
 		</Button>
-				<Button variant="ghost" class="h-12 w-full" href="/settings/email">
+		<Button variant="ghost" class="h-12 w-full" href="/settings/photo">
 			<div class="flex w-full justify-between gap-3 p-5">
 				Change Photo
 				<ChevronRight class="size-5" />
 			</div>
 		</Button>
-				<Button variant="ghost" class="h-12 w-full" href="/settings/email">
+		<Button variant="ghost" class="h-12 w-full" href="/settings/connections">
 			<div class="flex w-full justify-between gap-3 p-5">
-				Update Account Connections
+				Connected Accounts
 				<ChevronRight class="size-5" />
 			</div>
 		</Button>

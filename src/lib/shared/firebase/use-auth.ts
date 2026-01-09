@@ -1,6 +1,7 @@
 import {
 	GoogleAuthProvider,
 	signInWithPopup,
+	reauthenticateWithPopup,
 	signOut,
 	updateProfile as updateAuthProfile,
 	updateEmail as updateAuthEmail
@@ -12,9 +13,39 @@ export const useAuth = () => {
 	const { auth } = useFirebase();
 
 	const loginWithGoogle = async () => {
-
 		try {
 			const user = await signInWithPopup(auth, new GoogleAuthProvider());
+			return {
+				error: null,
+				data: user
+			};
+		} catch (e) {
+			if (e instanceof FirebaseError) {
+				return {
+					data: null,
+					error: e
+				};
+			}
+			if (e instanceof Error) {
+				return {
+					data: null,
+					error: e
+				};
+			}
+			throw e;
+		}
+	};
+
+	const reLoginWithGoogle = async () => {
+		const _user = auth.currentUser;
+		if (!_user) {
+			throw 'No user!';
+		}
+		try {
+			const user = await reauthenticateWithPopup(
+				_user,
+				new GoogleAuthProvider()
+			);
 			return {
 				error: null,
 				data: user
@@ -52,6 +83,24 @@ export const useAuth = () => {
 			};
 		} catch (e) {
 			if (e instanceof FirebaseError) {
+				if (e.code === 'auth/requires-recent-login') {
+					const providers = user.providerData.map((p) => p.providerId);
+					
+					if (!providers.includes('google.com')) {
+						return {
+							error: e
+						};
+					}
+					const { error: reauthError } = await reLoginWithGoogle();
+					if (reauthError) {
+						return {
+							error: reauthError
+						};
+					}
+					return {
+						error: null
+					};
+				}
 				return {
 					error: e
 				};

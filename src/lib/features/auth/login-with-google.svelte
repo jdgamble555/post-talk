@@ -8,7 +8,7 @@
 		const { error: loginError } = await loginWithGoogle();
 
 		if (loginError) {
-			toast.error('Failed to login with Google');
+			toast.error(loginError.message);
 			return;
 		}
 	};

@@ -1,27 +1,33 @@
 import { onIdTokenChanged, type User } from 'firebase/auth';
 import { onDestroy } from 'svelte';
-import { rune } from '../rune.svelte';
 import { useSharedContext } from '../use-shared-context';
 import { useFirebase } from './use-firebase';
 
 export const convertUser = async (user: User) => {
-	const { displayName, photoURL, uid, email } = user;
 	const tokenResult = await user.getIdTokenResult();
+
+	const { displayName, photoURL, uid, email, providerData } = user;
+
 	const username = tokenResult.claims?.username as string | undefined;
-	return { displayName, photoURL, uid, email, username };
+	const providers = providerData.map((provider) => provider.providerId);
+	return { displayName, photoURL, uid, email, username, providers };
 };
 
 const _useUser = () => {
 	const { auth } = useFirebase();
 
-	const user = rune<{
-		loading: boolean;
-		data: UserType | null;
-		error: Error | null;
+	const user = $state<{
+		current: {
+			loading: boolean;
+			data: UserType | null;
+			error: Error | null;
+		};
 	}>({
-		loading: true,
-		data: null,
-		error: null
+		current: {
+			loading: true,
+			data: null,
+			error: null
+		}
 	});
 
 	const unsubscribe = onIdTokenChanged(
@@ -38,15 +44,13 @@ const _useUser = () => {
 			}
 
 			// logged in
-			convertUser(_user).then(
-				(data) => {
-					user.current = {
-						loading: false,
-						data,
-						error: null
-					};
-				}
-			);
+			convertUser(_user).then((data) => {
+				user.current = {
+					loading: false,
+					data,
+					error: null
+				};
+			});
 		},
 		(error) => {
 			// error

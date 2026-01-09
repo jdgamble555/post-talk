@@ -1,42 +1,37 @@
 <script lang="ts">
+	import { useValibotSchema } from '$lib/shared/use-schema.svelte';
 	import BackBar from '$lib/shared/back-bar.svelte';
-	import * as Field from '$lib/components/ui/field/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import { LoaderCircle } from '@lucide/svelte';
 	import { Input } from '$lib/components/ui/input';
 	import { toast } from 'svelte-sonner';
 	import { useProfile } from '$lib/shared/firebase/use-profile';
 	import { emailSchema } from './email-schema';
-	import * as v from 'valibot';
 	import { useUser } from '$lib/shared/firebase/use-user.svelte';
+	import {
+		Field,
+		FieldSet,
+		FieldLabel,
+		FieldGroup,
+		FieldDescription,
+		FieldError
+	} from '$lib/components/ui/field/index.js';
 
 	const { updateEmail } = useProfile();
 
 	const user = useUser();
 
+	const { issues: _issues, validate } = useValibotSchema(emailSchema);
+
+	const issues = $derived(_issues.current);
+
 	// TODO
-	// remove email from users doc
-	// handle login with magic link
-	// handle relogin for change email
 	// update photo, drag and drop and click
 	// update connections
 	// look into linking accounts with different emails
 
 	let email = $derived(user.current.data?.email || '');
 	let isSaving = $state<boolean>(false);
-	let issues = $state<v.FlatErrors<typeof emailSchema>['nested'] | null>(null);
-	let valid = $state<boolean>(false);
-
-	const oninput = () => {
-		const result = v.safeParse(emailSchema, { email });
-		if (!result.success) {
-			issues = v.flatten<typeof emailSchema>(result.issues).nested;
-			valid = false;
-			return;
-		}
-		issues = null;
-		valid = true;
-	};
 
 	const onclick = async () => {
 		isSaving = true;
@@ -44,8 +39,7 @@
 		isSaving = false;
 
 		if (error) {
-			console.error(error);
-			toast.error('Failed to update email.');
+			toast.error(error.message);
 			return;
 		}
 		toast.success('Email updated successfully!');
@@ -55,35 +49,35 @@
 <div class="flex flex-col gap-5">
 	<BackBar title="Change Email" href="/settings" />
 	<div class="px-5">
-		<Field.Set>
-			<Field.Group>
-				<Field.Field>
-					<Field.Label for="email">Email</Field.Label>
+		<FieldSet>
+			<FieldGroup>
+				<Field>
+					<FieldLabel for="email">Email</FieldLabel>
 					<Input
 						id="email"
 						autocomplete="off"
 						placeholder="m@example.com"
-						{oninput}
+						oninput={() => validate({ email })}
 						bind:value={email}
-						aria-invalid={!!issues?.email?.[0]}
+						aria-invalid={!!issues?.email}
 					/>
 
-					{#if issues?.email}
-						<Field.Error>{issues.email[0]}</Field.Error>
+					{#each issues?.email as issue (issue)}
+						<FieldError>{issue}</FieldError>
 					{:else}
-						<Field.Description>
+						<FieldDescription>
 							This will be your new email address.
-						</Field.Description>
-					{/if}
-				</Field.Field>
-				<Button {onclick} disabled={!valid || isSaving}>
+						</FieldDescription>
+					{/each}
+				</Field>
+				<Button {onclick} disabled={!!issues || isSaving}>
 					{#if isSaving}
 						<LoaderCircle class="size-4 animate-spin" />
 					{:else}
 						Save
 					{/if}
 				</Button>
-			</Field.Group>
-		</Field.Set>
+			</FieldGroup>
+		</FieldSet>
 	</div>
 </div>

@@ -2,17 +2,18 @@
 	import * as Card from '$lib/components/ui/card';
 	import Link from '$lib/shared/link.svelte';
 	import LoginWithGoogle from './login-with-google.svelte';
+	import LoginWithMagicLink from './login-with-magic-link.svelte';
 </script>
 
 <div class="mt-8 px-5 sm:mt-16">
 	<Card.Root class="mx-auto max-w-sm">
 		<Card.Header>
 			<Card.Title class="text-2xl">Login</Card.Title>
-			<Card.Description>Enter your email below to login to your account</Card.Description>
+			<Card.Description>Enter your email below to receive a magic link for login.</Card.Description>
 		</Card.Header>
 		<Card.Content class="flex flex-col gap-5">
 			<div class="grid gap-6">
-				<!-- TODO: Login with Email -->
+				<LoginWithMagicLink />
 				<div class="relative">
 					<div class="absolute inset-0 flex items-center">
 						<span class="w-full border-t"></span>

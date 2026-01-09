@@ -8,12 +8,12 @@ const app = getApps().length ? getApp() : initializeApp();
 const db = getFirestore(app);
 
 export const onUserCreated = functions.auth.user().onCreate(async (user) => {
-	const { uid, email, displayName, photoURL } = user;
+	const { uid, displayName, photoURL } = user;
 
 	const userRef = db.doc(`users/${uid}`);
 
+	// Don't save email for privacy reasons
 	await userRef.set({
-		email: email ?? null,
 		displayName: displayName ?? null,
 		photoURL: photoURL ?? null,
 		createdAt: FieldValue.serverTimestamp()

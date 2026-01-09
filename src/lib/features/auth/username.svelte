@@ -9,11 +9,11 @@
 	} from '$lib/components/ui/field/index.js';
 	import { useDebounce } from '$lib/shared/use-debounce';
 	import { useUsername } from '$lib/shared/firebase/use-username';
-	import * as v from 'valibot';
 	import { UsernameSchema } from '$lib/features/auth/username-schema';
 	import { LoaderCircle } from '@lucide/svelte';
 	import { toast } from 'svelte-sonner';
 	import { useUser } from '$lib/shared/firebase/use-user.svelte';
+	import { useValibotSchema } from '$lib/shared/use-schema.svelte';
 
 	const user = useUser();
 
@@ -21,7 +21,6 @@
 
 	const id = $props.id();
 
-	let isError = $state<false | string>(false);
 	let isLoading = $state<boolean>(false);
 	let isAvailable = $state<boolean>(false);
 
@@ -29,20 +28,14 @@
 
 	const { usernameAvailable, setUsername } = useUsername();
 
-	const validate = () => {
-		const result = v.safeParse(UsernameSchema, { username });
+	const { validate, issues: _issues } = useValibotSchema(UsernameSchema);
 
-		if (!result.success) {
-			isError = result.issues[0].message;
-			return;
-		}
-		isLoading = true;
-		isError = false;
-		isAvailable = false;
-	};
+	let issues = $derived(_issues.current);
 
 	const debounceUsername = useDebounce(async () => {
-		if (isError) return;
+		if (issues) return;
+
+		isLoading = true;
 
 		const { error: availableError, available } =
 			await usernameAvailable(username);
@@ -50,17 +43,17 @@
 		isLoading = false;
 
 		if (availableError) {
-			isError = availableError.message;
+			issues = { username: [availableError.message] };
 			return;
 		}
 
 		isAvailable = available;
 
 		if (!available) {
-			isError = 'Username is already taken.';
+			issues = { username: ['Username is already taken.'] };
 			return;
 		}
-		isError = false;
+		issues = null;
 	}, 500);
 
 	const onclick = async () => {
@@ -69,10 +62,10 @@
 		isLoading = false;
 
 		if (error) {
-			isError = error.message;
+			issues = { username: [error.message] };
 			return;
 		}
-		isError = false;
+		issues = null;
 
 		toast.success('Username set successfully!');
 
@@ -84,17 +77,21 @@
 	<FieldLabel for="username-{id}">Username</FieldLabel>
 	<Input
 		oninput={() => {
-			validate();
+			validate({ username });
+			isLoading = true;
+			isAvailable = false;
 			debounceUsername();
 		}}
 		bind:value={username}
 		id="username-{id}"
 		type="text"
 		required
-		aria-invalid={!!isError}
+		aria-invalid={!!issues?.username}
 	/>
-	{#if isError}
-		<FieldError>{isError}</FieldError>
+	{#if issues}
+		{#each issues?.username as issue (issue)}
+			<FieldError>{issue}</FieldError>
+		{/each}
 	{:else if isAvailable}
 		<FieldDescription class="text-green-600">
 			Username is available!
@@ -110,7 +107,7 @@
 <Button
 	class="w-full cursor-pointer"
 	{onclick}
-	disabled={!!isError || !username || isLoading}
+	disabled={!!issues || !username || isLoading}
 >
 	{#if isLoading}
 		<LoaderCircle class="size-4 animate-spin" />
