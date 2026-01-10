@@ -14,7 +14,7 @@
 	const currentUser = $derived(user.current);
 
 	const next = $derived.by(() => {
-		const _next = page.url.searchParams.get('next') || '/home';
+		const _next = page.url.pathname || '/home';
 		const params = new SvelteURLSearchParams();
 		params.set('next', _next);
 		return params.toString();

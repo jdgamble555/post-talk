@@ -4,7 +4,9 @@ import {
 	reauthenticateWithPopup,
 	signOut,
 	updateProfile as updateAuthProfile,
-	updateEmail as updateAuthEmail
+	updateEmail as updateAuthEmail,
+	unlink,
+	linkWithPopup
 } from 'firebase/auth';
 import { useFirebase } from './use-firebase';
 import { FirebaseError } from 'firebase/app';
@@ -145,10 +147,68 @@ export const useAuth = () => {
 		}
 	};
 
+	const addProvider = async (providerId: string) => {
+		const user = auth.currentUser;
+		if (!user) {
+			throw 'No user!';
+		}
+		try {
+			if (providerId === 'google.com') {
+				// Add other providers here as needed
+				await linkWithPopup(
+					user,
+					new GoogleAuthProvider()
+				);
+			}
+			return {
+				error: null
+			};
+		} catch(e) {
+			if (e instanceof FirebaseError) {
+				return {
+					error: e
+				};
+			}
+			if (e instanceof Error) {
+				return {
+					error: e
+				};
+			}
+			throw e;
+		}
+	};
+
+	const removeProvider = async (providerId: string) => {
+		const user = auth.currentUser;
+		if (!user) {
+			throw 'No user!';
+		}
+		try {
+			await unlink(user, providerId);
+			return {
+				error: null
+			};
+		} catch(e) {
+			if (e instanceof FirebaseError) {
+				return {
+					error: e
+				};
+			}
+			if (e instanceof Error) {
+				return {
+					error: e
+				};
+			}
+			throw e;
+		}
+	};
+
 	return {
 		loginWithGoogle,
 		logout,
 		updateProfile,
-		updateEmail
+		updateEmail,
+		addProvider,
+		removeProvider
 	};
 };

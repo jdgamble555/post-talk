@@ -7,6 +7,7 @@ declare global {
 		uid: string;
 		email: string | null;
 		username?: string;
+		providers: string[];
 	};
 
 	type PostDoc = {
